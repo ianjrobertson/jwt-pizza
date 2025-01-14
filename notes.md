@@ -17,7 +17,7 @@ As part of `Deliverable ⓵ Development deployment: JWT Pizza`, start up the app
 | View About page                                     |about.tsx           |none               |none              |
 | View History page                                   |history.tsx         |none               |none              |
 | Login as franchisee<br/>(f@jwt.com, pw: franchisee) |login.tsx           |/api/auth', 'PUT'  |INSERT INTO auth (token, userId) VALUES (?, ?) INSERT INTO userRole (userId, role, objectId) VALUES (?, ?, ?)              |
-| View franchise<br/>(as franchisee)                  |                    |                   |              |
+| View franchise<br/>(as franchisee)                  |franchiseDashboard.tsx|/api/franchise/${user.id}|`SELECT objectId FROM userRole WHERE role='franchisee' AND userId=?`, [userId]  `SELECT id, name FROM franchise WHERE id in (${franchiseIds.join(',')})`|
 | Create a store                                      |                    |                   |              |
 | Close a store                                       |                    |                   |              |
 | Login as admin<br/>(a@jwt.com, pw: admin)           |                    |                   |              |
