@@ -6,7 +6,8 @@ dist
 **/.vite
 
 # Playwright
-node_modules/
+coverage
+node_modules
 /test-results/
 /playwright-report/
 /blob-report/
