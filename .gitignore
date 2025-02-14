@@ -4,6 +4,7 @@ cookies.txt
 config.js
 dist
 **/.vite
+coverage
 
 # Playwright
 coverage

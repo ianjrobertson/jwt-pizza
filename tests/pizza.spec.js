@@ -119,6 +119,8 @@ test("purchase with login", async ({ page }) => {
 
   // Check balance
   await expect(page.getByText("0.008")).toBeVisible();
+
+  await page.getByRole('button', { name: 'Verify' }).click();
 });
 
 test("diner dashboard", async ({ page }) => {
@@ -455,6 +457,11 @@ test('Create Franchise', async ({ page }) => {
 
 test('Docs', async ({ page }) => {
   await page.goto("/docs");
+})
+
+test('Not Found', async ({ page }) => {
+  await page.goto("/fake");
+  expect(page.locator('h2')).toContainText("Oops");
 })
 
 test('About', async ({ page }) => {
