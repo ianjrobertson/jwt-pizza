@@ -453,10 +453,6 @@ test('Create Franchise', async ({ page }) => {
 
 })
 
-test('Create Store', async ({ page }) => {
-  await page.goto("/");
-})
-
 test('Docs', async ({ page }) => {
   await page.goto("/docs");
 })
