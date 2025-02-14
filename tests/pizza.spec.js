@@ -366,8 +366,48 @@ test('Register User', async ({ page }) => {
 })
 
 test('Logout User', async ({ page }) => {
+  await page.route("*/**/api/auth", async (route) => {
+    if (route.request().method() == "PUT") {
+      const loginReq = { email: "d@jwt.com", password: "a" };
+      const loginRes = {
+        user: {
+          id: 3,
+          name: "Kai Chen",
+          email: "d@jwt.com",
+          roles: [{ role: "diner" }],
+        },
+        token: "abcdef",
+      };
+      expect(route.request().postDataJSON()).toMatchObject(loginReq);
+      await route.fulfill({ json: loginRes });
+    } else if (route.request().method() == "DELETE") {
+      //const logoutReq = {};
+      const logoutRes = {
+        message: "logout successful"
+      }
+      //expect(route.request().postDataJSON()).toMatchObject(logoutReq);
+      await route.fulfill({ json: logoutRes });
+    }
+    
+    
+  });
+
+  // start test
+
   await page.goto("/");
+  await page.getByRole("link", { name: "Login" }).click();
+  //await expect(page.locator("h2")).toContainText("Welcome back");
+
+  //login
+  await page.getByPlaceholder("Email address").click();
+  await page.getByPlaceholder("Email address").fill("d@jwt.com");
+  await page.getByPlaceholder("Email address").press("Tab");
+  await page.getByPlaceholder("Password").fill("a");
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("link", { name: "Logout" }).click();
 })
+
 
 test('Close Franchise', async ({ page }) => {
   await page.goto("/");
@@ -378,7 +418,39 @@ test('Close Store', async ({ page }) => {
 })
 
 test('Create Franchise', async ({ page }) => {
+  await page.route("*/**/api/auth", async (route) => {
+    const loginReq = { email: "a@jwt.com", password: "admin" };
+    const loginRes = {
+      user: {
+        id: 3,
+        name: "Kai Chen",
+        email: "a@jwt.com",
+        roles: [{ role: "admin" }],
+      },
+      token: "abcdef",
+    };
+    expect(route.request().method()).toBe("PUT");
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
   await page.goto("/");
+  await page.getByRole("link", { name: "Login" }).click();
+  await page.getByPlaceholder("Email address").click();
+  await page.getByPlaceholder("Email address").fill("a@jwt.com");
+  await page.getByPlaceholder("Email address").press("Tab");
+  await page.getByPlaceholder("Password").fill("admin");
+  await page.getByRole("button", { name: "Login" }).click();
+
+  await page.getByRole("link", { name: "Admin"}).click();
+  await page.getByRole("button", { name: "Add Franchise"}).click();
+  
+  await page.getByPlaceholder("franchise name").click();
+  await page.getByPlaceholder("franchise name").fill("test");
+  await page.getByPlaceholder("franchise name").press("Tab");
+  await page.getByPlaceholder("franchisee admin email").fill("a@jwt.com");
+  await page.getByRole("button", {name: "Create"}).click();
+
 })
 
 test('Create Store', async ({ page }) => {
