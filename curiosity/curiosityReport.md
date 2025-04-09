@@ -90,3 +90,45 @@ A common use case for Oauth is integrating with Google products. Google provides
 4. Send the access token to an API.
 
 ![google](public/google%20.png)
+
+### CS 340 - Tweeter
+In the tweeter project in CS340, one of the parts of the app is the Login page. The login page has icons indicating that a user could use social logins to register for the service, but these icons are lies! Tweeter does not support this feature. I am going to explore how I could integrate social logins using Auth0. 
+
+<img src="public/tweeter.png" width="400" height="300">
+
+#### How it would work
+1. Register your app with Auth0
+
+Doing this lets you get the important credentials shown in the Auth0 provider code snippet above. Then you would provide your sites name as the callback function. In 340, tweeter is not deployed, but following DevOps principles, we could very easily host it even on something like GitHub pages since it uses lambda and is serverless. 
+
+2. Enable Social Connections
+
+This is the kind of tedious part. I wonder if there is a way to automate this process. You need to choose the social providers you want to integrate with Auth0, then follow instructions to obtain an **App ID** an **App Secret** for each provider. 
+
+You have to manually go through each app integration to obtain these credentials and then place them into Auth0 where they handle the authentication flow. I wonder if there is a way to automate this!
+
+3. Enable Login response in the app
+
+Using the login code snippet and the proper authentications, it will open the univesal login page for Auth0 and once signed in the user will be redirected to the callback provided for tweeter. 
+
+then you can use a react hook to get the user. 
+
+```javascript
+const { loginWithRedirect, user, isAuthenticated } = useAuth0();
+```
+
+4. Store the user info in DynamoDB
+The user data from the hook represents a UserDto in the tweeter app. 
+
+``` typescript
+export interface UserDto {
+    readonly firstName: string, 
+    readonly lastName: string,
+    readonly alias: string,
+    readonly imageUrl: string,
+}
+```
+
+We can then create a new user in the user table without requiring a password. This would require some adjustments with the current auth flow that tweeter uses. 
+
+A cool thing that Auth0 provides is an [actions](https://auth0.com/docs/customize/actions) scripting option. These provide scripts that can run automaticlly when a user logins using Auth0. There could be an integration that automatically accesses DynamoDB and S3 when the login occurs. 
