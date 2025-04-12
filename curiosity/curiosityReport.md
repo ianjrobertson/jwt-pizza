@@ -94,7 +94,7 @@ A common use case for Oauth is integrating with Google products. Google provides
 ### CS 340 - Tweeter
 In the tweeter project in CS340, one of the parts of the app is the Login page. The login page has icons indicating that a user could use social logins to register for the service, but these icons are lies! Tweeter does not support this feature. I am going to explore how I could integrate social logins using Auth0. 
 
-<img src="public/tweeter.png" width="400" height="300">
+![tweeter](public/tweeter.png)
 
 #### How it would work
 1. Register your app with Auth0
